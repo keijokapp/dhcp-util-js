@@ -1,0 +1,42 @@
+// #!/usr/bin/node
+// server...
+
+var DhcpPeer = require('./dhcp.node').Peer;
+var LeaseManager = require('./LeaseManager');
+
+var server = new DhcpPeer;
+var leaseManager = new LeaseManager;
+
+// ... stuff
+
+server.on('message', function(packet, client) {
+	console.log('message', packet);
+	switch(packet.options.type) {
+	case 'DISCOVER':
+	case 'REQUEST':
+	case 'ACK':
+	case 'DECLINE':
+	case 'RELEASE':
+	case 'INFORM':
+	}
+});
+
+server.bind({
+	67
+});
+
+
+
+var client = new DhcpPeer;
+
+client.on('message', function(client, packet) {
+	
+})
+
+
+client.port(67)
+
+
+
+client.discover();
+
