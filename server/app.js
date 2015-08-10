@@ -4,7 +4,7 @@ import DhcpServer from './server';
 var bindings = [
 	{ addr: '0.0.0.0', port: 67 },
 ];
-
+ 
 
 for(var i = 0; i < bindings.length; i++) {
 	var server = new DhcpServer;
