@@ -1,7 +1,7 @@
 import util from 'util';
 import DhcpServer from './server';
 
-var bindings = { addr: '0.0.0.0', port: 67 };
+var binding = { addr: '0.0.0.0', port: 67 };
  
 
 var server = new DhcpServer;
