@@ -10,9 +10,8 @@ export default function Server() {
 
     this.server = dgram.createSocket('udp4');
     
-    this.server.on('message', function(packet) {
-	console.log("message");
-	console.log(parsePacket(packet))
+    this.server.on('message', function(packet, rinfo) {
+		_this.emit('message', parsePacket(packet), rinfo)	
     });
     
     this.server.on('listening', function() {
