@@ -29,7 +29,7 @@ int main(int argc,char **argv) {
     int x;
     struct sockaddr_in adr;  /* AF_INET */
     char dgram[512];         /* Recv buffer */
-	char* bc_addr = "127.255.255.2:9097";
+	char* bc_addr = "127.255.255.255:9097";
 
     /*
      * Use a server address from the command

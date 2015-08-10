@@ -9,11 +9,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
  
-#ifndef TRUE
-#define TRUE 1
-#define FALSE 0
-#endif
- 
 extern int mkaddr(void* addr, int* addrlen, char* str_addr, char* protocol);
  
 #define MAXQ 4
@@ -57,57 +52,42 @@ static void displayError(const char* on_what) {
 }
  
 int main(int argc,char** argv) {
-	char bcbuf[512];/* Buffer and ptr */
-	int z;      /* Status return code */
-	struct sockaddr_in adr_srvr;/* AF_INET */
-	struct sockaddr_in adr_bc;  /* AF_INET */
-	static int so_broadcast = TRUE;
-	static char* sv_addr = "127.0.0.:*";
-	char* bc_addr = "127.255.255.2:9097";
+	struct sockaddr_in srvAddr = {
+		.sin_family = AF_INET,
+		.sin_port = htons(67),
+		.sin_addr = inet_addr("10.1.4.1")
+	};
+	struct sockaddr_in listenAddr = {
+		.sin_family = AF_INET,
+		.sin_port = htons(67),
+		.sin_addr = inet_addr("0.0.0.0")
+	};
+	struct sockaddr_in bcAddr = {
+		.sin_family = AF_INET,
+		.sin_port = htons(68),
+		.sin_addr = inet_addr("10.1.4.255")	
+	};
 	 
-	if(argc > 2) sv_addr = argv[2];
-	if(argc > 1) bc_addr = argv[1];
-	 
-	int len_srvr = sizeof adr_srvr;
-
-	z = mkaddr(&adr_srvr, &len_srvr, sv_addr, "udp");
-	if(z == -1) displayError("Bad server address");
-	 
-	int len_bc = sizeof adr_bc;
-	 
-	z = mkaddr(&adr_bc, &len_bc, bc_addr, "udp");
-	if(z == -1) displayError("Bad broadcast address");
-	 
-	int s = socket(AF_INET,SOCK_DGRAM,0);
+	int s = socket(AF_INET, SOCK_DGRAM, 0);
 	if(s == -1) displayError("socket()");
 	 
-	z = setsockopt(s, SOL_SOCKET, SO_BROADCAST, &so_broadcast, sizeof so_broadcast);
-	 
-	if(z == -1) displayError("setsockopt(SO_BROADCAST)");
+	int so_broadcast = 1;
+	if(setsockopt(s, SOL_SOCKET, SO_BROADCAST, &so_broadcast, sizeof so_broadcast) == -1) displayError("setsockopt(SO_BROADCAST)");
 
-	z = bind(s, (struct sockaddr*)&adr_srvr, len_srvr);
-	 
-	if(z == -1) displayError("bind()");
-	 
-	initialize();
+	int r = bind(s, (struct sockaddr*)&listenAddr, sizeof(listenAddr));
+	if(r == -1) displayError("bind()");
 	 
 	for(;;) {
-		gen_quote();
-		 
-		char* bp = bcbuf;
-		short i;
-		for(i = 0; i < MAXQ; i++) {
-			double I0 = quotes[i].start / 100.0;
-			double I = quotes[i].current / 100.0;
-			sprintf(bp, "%-7.7s %8.2f %+.2f\n", quotes[i].index, I, I - I0);
-			bp += strlen(bp);
-		}
+		char buffer[512];
+		int r = read(s, buffer, 512);
+		printf("Got %d bytes\n", r);
 
-		z = sendto(s, bcbuf, strlen(bcbuf), 0, (struct sockaddr*)&adr_bc, len_bc); 
-		
-		if(z == -1) displayError("sendto()");
 
-		sleep(4);
+/*
+		int r = sendto(s, bcbuf, strlen(bcbuf), 0, (struct sockaddr*)&bcAddr, sizeof(bcAddr)); 
+		if(r == -1) displayError("sendto()");
+
+		sleep(4);*/
 	}
 	 
 	return 0;

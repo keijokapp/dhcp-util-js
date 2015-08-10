@@ -141,7 +141,7 @@ export default function(msg) {
 			p.options.maximumMessageSize = s.read16();
 			break;
 		case 58:		  // renewalTimeValue
-			var len = msg.read8();
+			var len = s.read8();
 			assert.strictEqual(len, 4);
 			p.options.renewalTimeValue = msg.read32();
 			break;
@@ -150,7 +150,7 @@ export default function(msg) {
 			p.options.rebindingTimeValue = msg.read32();
 			break;
 		case 60:		  // vendorClassIdentifier
-			var len = msg.read8();
+			var len = s.read8();
 			p.options.vendorClassIdentifier = s.readString(len);
 			break;
 		case 61:		  // clientIdentifier

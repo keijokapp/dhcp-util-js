@@ -78,7 +78,6 @@ int mkaddr(void* addr, int *addrlen, char* str_addr, char* protocol) {
 	else if(isdigit(*host_part)) {
 		ap->sin_addr.s_addr = inet_addr(host_part);
 		if(!inet_aton(host_part,&ap->sin_addr)) return -1;
-		printf("asdasdsad\n");
 	} else {
 		hp = gethostbyname(host_part);
 		if(!hp) return -1;
