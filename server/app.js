@@ -19,7 +19,6 @@ for(var i = 0; i < bindings.length; i++) {
 
 	server.bind(bindings[i])
 	.then(function() {
-		console.log('asdasd');
 //		console.log('bound to ' + bindints.addr + ':' + bindTo.port);
 	});
 }
