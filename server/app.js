@@ -3,9 +3,6 @@ import DhcpServer from './server';
 
 var bindings = [
 	{ addr: '0.0.0.0', port: 67 },
-	{ addr: '255.255.255.255', port: 67 },
-//	{ addr: '10.1.4.1', port: 67 },
-//	{ addr: '10.1.4.0', port: 67 }
 ];
 
 
@@ -13,7 +10,7 @@ for(var i = 0; i < bindings.length; i++) {
 	var server = new DhcpServer;
 
 	server.on('message', function(m) {
-		console.log('message: ', '(' + bindings[i].addr + ')', m.ciaddr)//util.inspect(m, false, 3));
+		console.log('message: ', '(' + bindings[i].addr + ')', m.ciaddr)
 	});
 
 	server.on('listening', function(addr) {
