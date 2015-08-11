@@ -39,7 +39,7 @@ client.on('message', function(msg) {
 		}
 	});
 	
-	console.log("Sending: ", parsePacket(discover))
+//	console.log("Sending: ", parsePacket(discover))
 
 	return client.broadcastPacket(discover, sendTo)
 })

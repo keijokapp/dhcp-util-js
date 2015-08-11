@@ -120,9 +120,7 @@ export default function(msg) {
 			var len = s.read8();
 			assert.strictEqual(len, 1);
 			var mtype = s.read8();
-			assert.ok(1 <= mtype);
-			assert.ok(8 >= mtype);
-			p.options.dhcpMessageType = protocol.DHCPMessageType.get(mtype);
+			p.options.dhcpMessageType = protocol.DHCPMessageType.get(mtype) || 0;
 			break;
 		case 54:		  // serverIdentifier
 			p.serverIdentifier = ip.fromLong(s.read32());
