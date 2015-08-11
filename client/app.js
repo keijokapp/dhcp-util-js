@@ -48,6 +48,7 @@ client.on('message', function(msg) {
 })
 .catch(function(err) {
 	console.error('catched: ', err)
+	err.stack.split('\n').forEach((line) => console.log(line))
 })
 .then(function() {
 	process.exit(0);
