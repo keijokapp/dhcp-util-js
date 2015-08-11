@@ -42,7 +42,8 @@ export default function(pkt) {
 	if('dhcpMessageType' in pkt.options) {
 		s.write8(53);
 		s.write8(1);
-		s.write8([0, 'DHCPDISCOVER', 'DHCPOFFER', 'DHCPREQUEST', 'DHCPDECLINE', 'DHCPACK', 'DHCPNAK', 'DHCPRELEASE'].indexOf(pkt.options.dhcpMessageType));
+		var opvalue = [0, 'DHCPDISCOVER', 'DHCPOFFER', 'DHCPREQUEST', 'DHCPDECLINE', 'DHCPACK', 'DHCPNAK', 'DHCPRELEASE'].indexOf(pkt.options.dhcpMessageType);
+		s.write8(opvalue >= 0 ? opvalue : 0);
 	}
 	if('serverIdentifier' in pkt.options) {
 		s.write8(54);
