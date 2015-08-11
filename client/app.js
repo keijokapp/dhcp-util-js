@@ -28,6 +28,7 @@ client.on('message', function(msg) {
 .then(function() {
     console.log('bound to ' + bindTo.addr + ':' + bindTo.port);
 })*/Promise.resolve()
+
 .then(function() {
 	var discover = client.createDiscoverPacket({
 		xid: 0x01,
