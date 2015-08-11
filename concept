@@ -13,6 +13,7 @@ server.on('message', function(packet, client) {
 	console.log('message', packet);
 	switch(packet.options.type) {
 	case 'DISCOVER':
+		
 	case 'REQUEST':
 	case 'ACK':
 	case 'DECLINE':
@@ -22,8 +23,20 @@ server.on('message', function(packet, client) {
 });
 
 server.bind({
-	67
+	host: '0.0.0.0',
+	port: 67
 });
+
+// client
+
+Client.prototype.discover = function() {
+	var packet = createPacket({
+		
+	});
+	this._peer.send(packet, 0, );
+}
+
+
 
 
 
@@ -33,10 +46,14 @@ client.on('message', function(client, packet) {
 	
 })
 
+client.serverAddress({
+	host: '255.255.255.255',
+	port: 67
+})
 
-client.port(67)
-
-
-
-client.discover();
-
+client.bind({
+	addr: '0.0.0.0',
+	port: 68
+}).then(function() {
+	client.discover();
+})

@@ -7,7 +7,11 @@ var binding = { addr: '0.0.0.0', port: 67 };
 var server = new DhcpServer;
 
 server.on('message', function(m) {
-	console.log('message: ', '(' + binding.addr + ')', m)
+	console.log('message: ', '(' + binding.addr + ')', m);
+	
+	if(m.options.dhcpMessageType.name === 'DHCPDISCOVER') {
+		server.offer()
+	}
 });
 
 server.on('listening', function(addr) {
