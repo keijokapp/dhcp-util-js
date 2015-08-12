@@ -20,6 +20,6 @@ server.on('listening', function(addr) {
 
 server.bind(binding)
 .then(function() {
-//		console.log('bound to ' + bindints.addr + ':' + bindTo.port);
+	console.log('bound to ' + binding[0].addr + ':' + binding[0].port);
 });
 
