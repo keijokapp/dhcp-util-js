@@ -24,11 +24,10 @@ client.on('message', function(msg) {
 	console.log('message', msg);
 })
 
-/*client.bind(bindTo)
+client.bind(bindTo)
 .then(function() {
     console.log('bound to ' + bindTo.addr + ':' + bindTo.port);
-})*/Promise.resolve()
-
+})
 .then(function() {
 	var discover = client.createDiscoverPacket({
 		xid: 0x01,
@@ -39,7 +38,7 @@ client.on('message', function(msg) {
 		}
 	});
 	
-//	console.log("Sending: ", parsePacket(discover))
+	console.log("Sending: ", parsePacket(discover))
 
 	return client.broadcastPacket(discover, sendTo)
 })
