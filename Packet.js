@@ -1,5 +1,8 @@
-export default Packet = function(packet) {
-	if()
-}.schema(['string', Object])
 
-Packet.prototype.
+export default Packet = function() {
+
+}.schema({
+	op: 'uint'
+	xid: 'uint',
+	
+})
