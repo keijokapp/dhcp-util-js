@@ -35,42 +35,57 @@ var		equal = function(a, b, msg) {
 		 * * any Function object (constructor)
 		 * * array of types listed above (if multiple types are allowed)
 		 */
-
-		type = function(value, type) {
-			if(!type) continue;
-			var type = typeof type === 'object' ? type : [ type ];
+		a = 0,
+		type = function(value, types) {
+			if(!types) return;
+			var b = a++
+			var types = types instanceof Array ? types : [ types ];
 			var found = false;
-			for(var i = 0; i < type.length && !found; i++) {
-				switch(type[i]) {
+			for(var i = 0; i < types.length && !found; i++) {
+				var t = types[i];
+				switch(t) {
 				case 'undefined':
 				case 'number':
 				case 'boolean':
-				case 'string': found = typeof arguments[i] === type[i]; break;
-				case 'null': found = arguments[i] === null; break;
+				case 'string': found = typeof value === t; break;
+				case 'null': found = value === null; break;
 				case 'int': found = parseInt(value) === value; break;
 				case 'uint': found = parseInt(value) === value && value >= 0; break;
 				default:
-					if(type[i] instanceof Function)
-						found = arguments[i] instanceof type[i];
-					else {
-						for(var ii in type[i]) {
-							type([ii][i], type[i]);
-						}
+					if(t instanceof Function) {
+						found = value instanceof t;
+					} else if(typeof t === 'object' && t !== null) {
+						for(var ii in t)
+							type(value[ii], t[ii]);
+						found = true;
 					}
 				}
 			}
-			if(!found) throw new TypeError('expected ' + JSON.stringify(type) + ', got ' + JSON.stringify(value));
+			if(!found) throw new TypeError('expected ' + JSON.stringify(types) + ', got ' + JSON.stringify(value));
 		},
-
 
 		functionSchema = function() {
 			var _this = this;
 			var _arguments = arguments;
-			return function() {
+			return function tmp() {
 				for(var i = 0, l = _arguments.length; i < l; i++) {
 					type(arguments[i], _arguments[i]);
 				}
-				return _this.apply(this, arguments);
+				
+				if(this !== undefined && this !== null && this.__proto__ === tmp.prototype) {
+					console.log('asdasd');
+				} else {
+					return _this.apply(this, arguments);
+				}
+			}
+		},
+		
+		functionConstructor = function() {
+			var _this = this;
+			var _arguments = arguments;
+			return function tmp() {
+				if(!this || this.__proto__ !== tmp.prototype)
+					assert.ok(false, 'not called as constructor');
 			}
 		};
 
@@ -78,6 +93,10 @@ var		equal = function(a, b, msg) {
 Object.defineProperty(Function.prototype, 'schema', {
 	enumerable: false,
 	value: functionSchema
+});
+Object.defineProperty(Function.prototype, 'constructor', {
+	enumerable: false,
+	value: functionConstructor
 });
 
 export {
